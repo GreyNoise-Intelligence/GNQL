@@ -1,0 +1,2 @@
+# GNQL
+GreyNoise Query Language
