@@ -87,6 +87,11 @@ Return all devices crawling the Internet for the HTTP path "/HNAP1/"
 $ gnql raw_data.web.paths:"\/HNAP1\/"
 ```
 
+Return all devices scanning the Internet from the CIDR block 8.0.0.0/8
+```
+$ gnql ip:"8.0.0.0\/8"
+```
+
 ## Requirements
 Python requests
 ```
