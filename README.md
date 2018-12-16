@@ -196,13 +196,14 @@ You can query the GNQL API directly by issuing a URL-encoded HTTP GET request to
 The response format is as follows:
 ```
 {
-  "count": 0,                   // Total number of IPs matching your GNQL query (not to be confused with total number returned)
+  "count": 0,                   // total number of IPs matching your GNQL query (not to be confused with total number returned)
   "data": [],                   // response data
   "message": "ok",              // message confirming your request was handled okay
-  "query": "your_query_here"    // your GNQL query string
+  "query": "your_query_here",   // your GNQL query string
+  "scroll": "asldkjaslkdjla",   // token to use for pagination
+  "complete": false             // whether all records have been delivered or not (false means there's another page)
 }
 ```
-
 
 ## Bugs
 
@@ -217,9 +218,7 @@ Please file GNQL feature requests as issues on this GitHub repository.
 ## Notes
 
 - The data updates every hour on the hour
-- The API currently returns 10,000 results maximum per request. I still need to implement pagination
 - We're in the process of building a much more verbose API that returns datetime
-- This service is only loaded with data starting on 10/13/2018. If this feature provides value then we will retroload the full GreyNoise dataset
 
 ## Getting access
 
