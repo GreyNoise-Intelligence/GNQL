@@ -8,7 +8,11 @@ GNQL (GreyNoise Query Language) is a domain-specific query language that uses Lu
 - GreyNoise developers have a limited amount of time/resources to devote for building API endpoints that satisfy every use-case
 
 # Getting started
-We've included a small command line tool that takes raw queries from the CLI and spits out raw JSON. This will need to be piped to `jq` or spit into a file for processesing elsewhere. I know it sucks right now but bear with me. 
+
+```
+$ pip3 install greynoise --upgrade
+$ greynoise setup -k YOUR_KEY_HERE
+```
 
 You can use GNQL to query IPs, tags, CIDR blocks, ASNs, and any other field directly, or create complex queries by adding and subtracting criteria.
 
@@ -18,91 +22,78 @@ You can use GNQL to query IPs, tags, CIDR blocks, ASNs, and any other field dire
 Return all devices with the "Mirai" tag
 
 ```
-$ gnql tags:Mirai
+$ greynoise tags:Mirai
 ```
 
 Return all devices with the "RDP Scanner" tag
 
 ```
-$ gnql tags:"RDP Scanner"
+$ greynoise tags:"RDP Scanner"
 ```
 
 Return all compromised devices located in Belgium
 
 ```
-$ gnql classification:malicious metadata.country:Belgium
+$ greynoise "classification:malicious metadata.country:Belgium"
 ```
 
 Return all compromised devices that include `.gov` in their reverse DNS records
 
 ```
-$ gnql classification:malicious metadata.rdns:*.gov*
+$ greynoise "classification:malicious metadata.rdns:*.gov*"
 ```
 
 Return all compromised devices that belong to Microsoft
 
 ```
-$ gnql metadata.organization:Microsoft classification:malicious
+$ greynoise "metadata.organization:Microsoft classification:malicious"
 ```
 
 Return all devices scanning the Internet for port 445/TCP running Windows operating systems (Conficker/EternalBlue/WannaCry)
 
 ```
-$ gnql "(raw_data.scan.port:445 and raw_data.scan.protocol:TCP)" metadata.os:Windows*
+$ greynoise "(raw_data.scan.port:445 and raw_data.scan.protocol:TCP) metadata.os:Windows*"
 ```
 
 Return all devices scanning the Internet for port 554
 
 ```
-$ gnql raw_data.scan.port:554
+$ greynoise raw_data.scan.port:554
 ```
 
 Return all devices crawling the Internet with "GoogleBot" in their useragent from a network that does NOT belong to Google
 
 ```
-$ gnql -metadata.organization:Google raw_data.web.useragents:GoogleBot
+$ greynoise "-metadata.organization:Google raw_data.web.useragents:GoogleBot"
 ```
 
 Return all devices scanning the Internet for SCADA devices who ARE NOT tagged by GreyNoise as "benign" (Shodan/Project Sonar/Censys/BinaryEdge/Google/Bing/etc)
 
 ```
-$ gnql tags:"Siemens PLC Scanner" -classification:benign
+$ greynoise 'tags:"Siemens PLC Scanner" -classification:benign'
 ```
 
 Return all "good guys" scanning the Internet
 
 ```
-$ gnql classification:benign
+$ greynoise classification:benign
 ```
 
 Return all devices crawling the Internet with a matching client JA3 TLS/SSL fingerprint
 
 ```
-$ gnql raw_data.ja3.fingerprint:795bc7ce13f60d61e9ac03611dd36d90
+$ greynoise raw_data.ja3.fingerprint:795bc7ce13f60d61e9ac03611dd36d90
 ```
 
 Return all devices crawling the Internet for the HTTP path "/HNAP1/"
 
 ```
-$ gnql raw_data.web.paths:"\/HNAP1\/"
+$ greynoise 'raw_data.web.paths:"/HNAP1/"'
 ```
 
 Return all devices scanning the Internet from the CIDR block 8.0.0.0/8
 ```
-$ gnql ip:"8.0.0.0\/8"
-```
-
-## Requirements
-Python requests
-```
-$ pip install requests
-```
-
-## Installation
-
-```
-$ git clone http://github.com/GreyNoise-Intelligence/GNQL
-
+$ greynoise 8.0.0.0/8
 ```
 
 ## GNQL Field Reference
@@ -183,9 +174,6 @@ raw_data.ja3.port - The corresponding TCP port for the given JA3 fingerprint
 
 
 ## Tips
-- GNQL hates unescaped forward slashes. Please escape your forward slashes with backslashes when using the CLI
-- Certain GNQL fields need to be put into quotes, like IP
-- You can query CIDR blocks by doing `"ip:1.0.0.0\/8"`. Please note the escaped slash and quotes
 - You can free text search fields by querying `whatever:"*something*"` or search things that start with a string by querying `whatever:"starts with*"`
 
 
@@ -220,6 +208,3 @@ Please file GNQL feature requests as issues on this GitHub repository.
 - The data updates every hour on the hour
 - We're in the process of building a much more verbose API that returns datetime
 
-## Getting access
-
-If you are a GreyNoise Enterprise customer or a GreyNoise Research/Beta member you already have access. If you want to become a GreyNoise Enterprise customer, please email sales@greynoise.io or visit https://greynoise.io/enterprise. If you wish to join our research community, please email hello@greynoise.io. 
