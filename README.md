@@ -175,12 +175,18 @@ raw_data.ja3.port - The corresponding TCP port for the given JA3 fingerprint
 
 ## Tips
 - You can free text search fields by querying `whatever:"*something*"` or search things that start with a string by querying `whatever:"starts with*"`
-
+- You need to escape your forward slashes to take advantage of things like CIDR notation
 
 ## API
-
 You can query the GNQL API directly by issuing a URL-encoded HTTP GET request to `https://research.api.greynoise.io/v2/experimental/gnql?query=your_gnql_query_string_here`
 
+### Request
+GET Parameters:
+- query: Your GNQL query string
+- scroll: Your scroll token to page through results
+- size: How many results you want (max 10k)
+
+### Response
 The response format is as follows:
 ```
 {
